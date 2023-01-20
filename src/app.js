@@ -1,11 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const express = require("express");
-const {
-  accounts,
-  users,
-  writeJSON,
-} = require("/Users/joshua.murphy/FullStackAcademyNode/bankingportal/NodeExpress-BankingPortal/src/data");
+const { accounts, users, writeJSON } = require("./data");
 const app = express();
 
 app.set("view engine", "ejs");
