@@ -1,7 +1,11 @@
 const fs = require("fs");
 const path = require("path");
 const express = require("express");
-
+const {
+  accounts,
+  users,
+  writeJSON,
+} = require("/Users/joshua.murphy/FullStackAcademyNode/bankingportal/NodeExpress-BankingPortal/src/data");
 const app = express();
 
 app.set("view engine", "ejs");
@@ -10,16 +14,6 @@ app.set("views", path.join(__dirname, "/views"));
 app.use(express.static(path.join(__dirname, "/public")));
 
 app.use(express.urlencoded({ extended: true }));
-
-const file = fs.readFileSync("src/json/accounts.json", "UTF8");
-
-const accountData = file;
-
-const accounts = JSON.parse(accountData);
-
-const userData = fs.readFileSync("src/json/users.json", "UTF8");
-
-const users = JSON.parse(userData);
 
 app.get("/", (req, res) => {
   res.render("index", { title: "Account Summary", accounts: accounts });
@@ -56,11 +50,7 @@ app.post("/payment", (req, res) => {
 
   accountsJSON = JSON.stringify(accounts);
 
-  fs.writeFileSync(
-    path.join(__dirname, "json/accounts.json"),
-    accountsJSON,
-    "utf8"
-  );
+  writeJSON();
 
   res.render("payment", {
     message: "Payment Successful",
@@ -74,14 +64,7 @@ app.post("/transfer", (req, res) => {
   const addedBalance =
     accounts[req.body.to].balance + parseInt(req.body.amount);
   accounts[req.body.to].balance = addedBalance;
-
-  let accountsJSON = JSON.stringify(accounts);
-
-  fs.writeFileSync(
-    path.join(__dirname, "json/accounts.json"),
-    accountsJSON,
-    "utf8"
-  );
+  writeJSON();
   res.render("transfer", { message: "Transfer Completed" });
 });
 
